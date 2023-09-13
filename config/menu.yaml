@@ -1,78 +1,78 @@
 ---
-# 菜单配置初始化(服务启动时会进行数据检查，如果存在则不再初始化)
-- name: 控制台
+# 메뉴 구성 초기화(서비스 시작 시 데이터 확인이 수행되며, 데이터가 있는 경우 다시 초기화되지 않음)
+- name: 콘솔
   icon: cpanel
   sequence: 1000
   actions:
     - code: visible
-      name: 可见
-- name: 系统管理
+      name: 보기
+- name: 시스템 관리
   icon: setting
   sequence: 1100
   actions:
     - code: visible
-      name: 可见
+      name: 보기
   children:
-    - name: 菜单管理
+    - name: 메뉴 관리
       icon: menu
       router: "/system/menu"
       component: "system/menu/index"
       sequence: 1101
       actions:
         - code: add
-          name: 新建
+          name: 추가
           resources:
             - method: POST
               path: "/api/v1/menus"
         - code: edit
-          name: 编辑
+          name: 수정
           resources:
             - method: GET
               path: "/api/v1/menus/:id"
             - method: PUT
               path: "/api/v1/menus/:id"
         - code: delete
-          name: 删除
+          name: 삭제
           resources:
             - method: DELETE
               path: "/api/v1/menus/:id"
         - code: query
-          name: 查询
+          name: 검색
           resources:
             - method: GET
               path: "/api/v1/menus"
             - method: GET
               path: "/api/v1/publics/sys/routes"
         - code: query-actions
-          name: 查询动作
+          name: 쿼리 작업
           resources:
             - method: GET
               path: "/api/v1/menus/:id/actions"
         - code: disable
-          name: 禁用
+          name: 비활성화
           resources:
             - method: PATCH
               path: "/api/v1/menus/:id/disable"
         - code: enable
-          name: 启用
+          name: 활성화
           resources:
             - method: PATCH
               path: "/api/v1/menus/:id/enable"
-    - name: 角色管理
+    - name: 역할 관리
       icon: role
       router: "/system/role"
       component: "system/role/index"
       sequence: 1102
       actions:
         - code: add
-          name: 新增
+          name: 추가
           resources:
             - method: GET
               path: "/api/v1/menus"
             - method: POST
               path: "/api/v1/roles"
         - code: edit
-          name: 编辑
+          name: 수정
           resources:
             - method: GET
               path: "/api/v1/menus"
@@ -81,42 +81,42 @@
             - method: PUT
               path: "/api/v1/roles/:id"
         - code: delete
-          name: 删除
+          name: 삭제
           resources:
             - method: DELETE
               path: "/api/v1/roles/:id"
         - code: query
-          name: 查询
+          name: 검색
           resources:
             - method: GET
               path: "/api/v1/roles"
             - method: GET
               path: "/api/v1/roles/:id"
         - code: disable
-          name: 禁用
+          name: 비활성화
           resources:
             - method: PATCH
               path: "/api/v1/roles/:id/disable"
         - code: enable
-          name: 启用
+          name: 활성화
           resources:
             - method: PATCH
               path: "/api/v1/roles/:id/enable"
-    - name: 用户管理
+    - name: 사용자 관리
       icon: user
       router: "/system/user"
       component: "system/user/index"
       sequence: 1103
       actions:
         - code: add
-          name: 新增
+          name: 추가
           resources:
             - method: GET
               path: "/api/v1/roles"
             - method: POST
               path: "/api/v1/users"
         - code: edit
-          name: 编辑
+          name: 수정
           resources:
             - method: GET
               path: "/api/v1/roles"
@@ -125,22 +125,22 @@
             - method: PUT
               path: "/api/v1/users/:id"
         - code: delete
-          name: 删除
+          name: 삭제
           resources:
             - method: DELETE
               path: "/api/v1/users/:id"
         - code: query
-          name: 查询
+          name: 검색
           resources:
             - method: GET
               path: "/api/v1/users"
         - code: disable
-          name: 禁用
+          name: 비활성화
           resources:
             - method: PATCH
               path: "/api/v1/users/:id/disable"
         - code: enable
-          name: 启用
+          name: 활성화
           resources:
             - method: PATCH
               path: "/api/v1/users/:id/enable"

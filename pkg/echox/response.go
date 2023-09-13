@@ -1,4 +1,4 @@
-package exhox
+package echox
 
 import (
 	"github.com/labstack/echo/v4"
@@ -15,7 +15,7 @@ type Response struct {
 }
 
 // JSON sends a JSON response with status code
-func (r *Response) JSON(ctx echo.Context) error {
+func (r Response) JSON(ctx echo.Context) error {
 	if r.Message == "" || r.Message == nil {
 		r.Message = http.StatusText(r.Code)
 	}

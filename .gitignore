@@ -142,3 +142,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+/go-api-template
+/api_backend
+/logs/api-backend.log
+/build/api_backend

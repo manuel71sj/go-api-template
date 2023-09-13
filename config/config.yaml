@@ -1,4 +1,4 @@
-Name: echo-admin
+Name: api-backend
 
 Log:
   Level: debug
@@ -8,12 +8,12 @@ Log:
 
 HTTP:
   Host: 0.0.0.0
-  Port: 2222
+  Port: 8080
 
 SuperAdmin:
-  Username: root
-  Realname: 超级管理员
-  Password: 123123
+  Username: admin
+  Realname: 슈퍼 관리자
+  Password: P9661144!
 
 Auth:
   Enable: true
@@ -23,6 +23,11 @@ Auth:
     - /swagger
     - /api/v1/publics/captcha
     - /api/v1/publics/user/login
+  Captcha:
+    Enable: false
+    Width: 240        # 140
+    Height: 80        # 46
+    NoiseCount: 2     # 2
 
 Casbin:
   Enable: true
@@ -36,18 +41,18 @@ Casbin:
     - /api/v1/publics/captcha
 
 Redis:
-  Host: 172.16.217.2
+  Host: 192.168.5.58
   Port: 6379
-  Password: redispass
+#  Password: aosk1101!
   KeyPrefix: r
 
 Database:
   Engine: mysql
-  Name: clean
-  Host: 172.16.217.2
-  Port: 3306
+  Name: echo
+  Host: 129.154.59.231
+  Port: 13306
   Username: root
-  Password: sqlpass
+  Password: P9661144!
   TablePrefix: t
   Parameters: charset=utf8mb4&parseTime=True&loc=Local&allowNativePasswords=true&timeout=5s
   MaxLifetime: 7200

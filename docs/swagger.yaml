@@ -1,12 +1,4 @@
 definitions:
-  database.DateTime:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
   dto.CaptchaVerify:
     properties:
       code:
@@ -28,8 +20,6 @@ definitions:
       username:
         type: string
     required:
-    - captcha_code
-    - captcha_id
     - password
     - username
     type: object
@@ -64,9 +54,11 @@ definitions:
       component:
         type: string
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
       created_by:
         type: string
+      deleted:
+        type: boolean
       hidden:
         maximum: 1
         minimum: -1
@@ -92,7 +84,7 @@ definitions:
         minimum: -1
         type: integer
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
     required:
     - hidden
     - icon
@@ -106,7 +98,9 @@ definitions:
       code:
         type: string
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
+      deleted:
+        type: boolean
       id:
         type: string
       menu_id:
@@ -118,7 +112,7 @@ definitions:
           $ref: '#/definitions/models.MenuActionResource'
         type: array
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
     required:
     - code
     - name
@@ -126,13 +120,15 @@ definitions:
   models.MenuActionResource:
     properties:
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
+      deleted:
+        type: boolean
       method:
         type: string
       path:
         type: string
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
     required:
     - method
     - path
@@ -149,9 +145,11 @@ definitions:
   models.Role:
     properties:
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
       created_by:
         type: string
+      deleted:
+        type: boolean
       id:
         type: string
       name:
@@ -169,7 +167,7 @@ definitions:
         minimum: -1
         type: integer
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
     required:
     - name
     - remark
@@ -181,7 +179,9 @@ definitions:
       action_id:
         type: string
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
+      deleted:
+        type: boolean
       id:
         type: string
       menu_id:
@@ -189,7 +189,7 @@ definitions:
       role_id:
         type: string
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
     required:
     - action_id
     - menu_id
@@ -207,9 +207,11 @@ definitions:
   models.User:
     properties:
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
       created_by:
         type: string
+      deleted:
+        type: boolean
       email:
         type: string
       id:
@@ -225,7 +227,7 @@ definitions:
         minimum: -1
         type: integer
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
       user_roles:
         items:
           $ref: '#/definitions/models.UserRole'
@@ -249,20 +251,30 @@ definitions:
   models.UserRole:
     properties:
       created_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
+      deleted:
+        type: boolean
       id:
         type: string
       role_id:
         type: string
       updated_at:
-        $ref: '#/definitions/database.DateTime'
+        $ref: '#/definitions/sql.NullTime'
       user_id:
         type: string
+    type: object
+  sql.NullTime:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
     type: object
 info:
   contact: {}
 paths:
-  /api/menus:
+  /api/v1/menus:
     get:
       parameters:
       - in: query
@@ -367,7 +379,7 @@ paths:
       summary: Menu Create
       tags:
       - Menu
-  /api/menus/{id}:
+  /api/v1/menus/{id}:
     delete:
       parameters:
       - description: menu id
@@ -454,7 +466,7 @@ paths:
       summary: Menu Update By ID
       tags:
       - Menu
-  /api/menus/{id}/actions:
+  /api/v1/menus/{id}/actions:
     get:
       parameters:
       - description: menu id
@@ -520,7 +532,7 @@ paths:
       summary: MenuActions Update By ID
       tags:
       - Menu
-  /api/menus/{id}/disable:
+  /api/v1/menus/{id}/disable:
     patch:
       parameters:
       - description: menu id
@@ -546,7 +558,7 @@ paths:
       summary: Menu Disable By ID
       tags:
       - Menu
-  /api/menus/{id}/enable:
+  /api/v1/menus/{id}/enable:
     patch:
       parameters:
       - description: menu id
@@ -572,7 +584,7 @@ paths:
       summary: Menu Enable By ID
       tags:
       - Menu
-  /api/publics/captcha:
+  /api/v1/publics/captcha:
     get:
       produces:
       - application/json
@@ -592,7 +604,7 @@ paths:
       summary: GetCaptcha
       tags:
       - Public
-  /api/publics/captcha/verify:
+  /api/v1/publics/captcha/verify:
     post:
       parameters:
       - description: CaptchaVerify
@@ -615,15 +627,8 @@ paths:
       summary: VerifyCaptcha
       tags:
       - Public
-  /api/publics/sys/routes:
-    post:
-      parameters:
-      - description: Login
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.Login'
+  /api/v1/publics/sys/routes:
+    get:
       produces:
       - application/json
       responses:
@@ -639,10 +644,10 @@ paths:
           description: internal error
           schema:
             type: string
-      summary: UserLogin
+      summary: SysRoutes
       tags:
       - Public
-  /api/publics/user:
+  /api/v1/publics/user:
     get:
       produces:
       - application/json
@@ -662,7 +667,7 @@ paths:
       summary: UserInfo
       tags:
       - Public
-  /api/publics/user/login:
+  /api/v1/publics/user/login:
     post:
       parameters:
       - description: Login
@@ -689,7 +694,7 @@ paths:
       summary: UserLogin
       tags:
       - Public
-  /api/publics/user/logout:
+  /api/v1/publics/user/logout:
     post:
       produces:
       - application/json
@@ -701,7 +706,7 @@ paths:
       summary: UserLogout
       tags:
       - Public
-  /api/publics/user/menutree:
+  /api/v1/publics/user/menutree:
     get:
       produces:
       - application/json
@@ -721,7 +726,7 @@ paths:
       summary: UserMenuTree
       tags:
       - Public
-  /api/roles:
+  /api/v1/roles:
     get:
       parameters:
       - in: query
@@ -812,7 +817,7 @@ paths:
       summary: Role Create
       tags:
       - Role
-  /api/roles.all:
+  /api/v1/roles.all:
     get:
       parameters:
       - in: query
@@ -879,7 +884,7 @@ paths:
       summary: Role Get All
       tags:
       - Role
-  /api/roles/{id}:
+  /api/v1/roles/{id}:
     delete:
       parameters:
       - description: role id
@@ -966,7 +971,7 @@ paths:
       summary: Role Update By ID
       tags:
       - Role
-  /api/roles/{id}/disable:
+  /api/v1/roles/{id}/disable:
     put:
       parameters:
       - description: role id
@@ -992,7 +997,7 @@ paths:
       summary: Role Disable By ID
       tags:
       - Role
-  /api/roles/{id}/enable:
+  /api/v1/roles/{id}/enable:
     put:
       parameters:
       - description: role id
@@ -1018,7 +1023,7 @@ paths:
       summary: Role Enable By ID
       tags:
       - Role
-  /api/users:
+  /api/v1/users:
     get:
       parameters:
       - in: query
@@ -1112,7 +1117,7 @@ paths:
       summary: User Create
       tags:
       - User
-  /api/users/{id}:
+  /api/v1/users/{id}:
     delete:
       parameters:
       - description: user id
@@ -1199,7 +1204,7 @@ paths:
       summary: User Update By ID
       tags:
       - User
-  /api/users/{id}/disable:
+  /api/v1/users/{id}/disable:
     put:
       parameters:
       - description: user id
@@ -1225,7 +1230,7 @@ paths:
       summary: User Disable By ID
       tags:
       - User
-  /api/users/{id}/enable:
+  /api/v1/users/{id}/enable:
     put:
       parameters:
       - description: user id
@@ -1251,4 +1256,9 @@ paths:
       summary: User Enable By ID
       tags:
       - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
